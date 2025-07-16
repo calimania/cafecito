@@ -1,6 +1,6 @@
 {
   "name": "cafecito",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "React componets & utilities for markket clients",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -15,6 +15,7 @@
     "markket",
     "calima"
   ],
+  "type": "module",
   "author": "calimania",
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
@@ -50,8 +51,5 @@
       "require": "./dist/cjs/strapi/index.js",
       "types": "./dist/strapi/index.d.ts"
     }
-  },
-  "dependencies": {
-    "@types/prop-types": "^15.7.15"
   }
 }
