@@ -34,26 +34,18 @@ Create a `strapi-loader` file to use in your `content/config`
 
 ```typescript
 // - src/lib/strapi-loader
-import type { Loader } from "astro/loaders";
-import { markketplace } from "@/config";
-
 import {
   fetchStrapiContent,
   fetchStrapiSchema,
-  StrapiConfig,
-  StrapiQueryOptions,
-} from 'cafecito/strapi';
+} from 'cafecito';
+
+import type { StrapiQueryOptions } from 'cafecito';
+import type { StrapiConfig } from 'cafecito';
 
 const config: StrapiConfig = {
   store_slug: markketplace.STORE_SLUG,
   api_url: markketplace.STRAPI_URL,
   sync_interval: 60000,
-};
-
-const query: StrapiQueryOptions = {
-  contentType: 'article',
-  filter: `filters[store][id][$eq]=${markketplace.STORE_SLUG}`,
-  populate: 'SEO.socialImage',
 };
 
 /**
@@ -62,10 +54,12 @@ const query: StrapiQueryOptions = {
  * @param filter The filter to apply to the content &filters[store][id][$eq]=${STRAPI_STORE_ID}
  * @returns An Astro loader for the specified content type
  */
-export function strapiLoader({ contentType, filter, populate = 'SEO.socialImage', paginate }: { contentType: string, filter?: string, populate?: string, paginate?: { limit: number } }): Loader {
+export function strapiLoader(query: StrapiQueryOptions) {
+
   return {
-    name: `strapi-${contentType}`,
+    name: `strapi-${query.contentType}`,
     schema: async () => await fetchStrapiSchema(query.contentType, config.api_url),
+
     async load({ store, logger, meta }) {
       const lastSynced = meta.get("lastSynced");
       console.log('a')
