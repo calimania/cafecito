@@ -4,6 +4,7 @@ export type StrapiQueryOptions = {
   contentType: string;
   filter?: string;
   populate?: string;
+  sort?: string;
   paginate?: { limit: number };
 };
 
@@ -23,7 +24,7 @@ export async function fetchStrapiContent(
   query: StrapiQueryOptions,
   config: StrapiConfig
 ): Promise<any[]> {
-  const { contentType, filter, populate = 'SEO.socialImage', paginate } = query;
+  const { contentType, filter, populate = 'SEO.socialImage', paginate, sort = "updatedAt:desc" } = query;
   const { api_url } = config;
 
   let filterKey = '', filterValue = '';
@@ -33,6 +34,7 @@ export async function fetchStrapiContent(
     [filterKey]: filterValue,
     populate,
     'pagination[limit]': (paginate?.limit || '') as string || '25',
+    sort,
   }, api_url);
 
   const posts = data?.data;
@@ -42,7 +44,6 @@ export async function fetchStrapiContent(
 }
 
 export async function fetchStrapiSchema(contentType: string, api_url: string): Promise<ZodObject<any>> {
-  console.log('abbbb', contentType, api_url);
   const data = await fetchFromStrapi(`/get-strapi-schema/schema/${contentType}`, {}, api_url);
   if (!data?.attributes) throw new Error("Invalid schema data received from Strapi");
 
@@ -105,6 +106,7 @@ async function fetchFromStrapi(
 
   if (params.populate) {
     const populateFields = params.populate.split(',');
+
     populateFields.forEach((field, index) => {
       if (field.includes('.')) {
         const [parent, child] = field.split('.');
@@ -114,6 +116,7 @@ async function fetchFromStrapi(
         url.searchParams.append('populate', field);
       }
     });
+
     delete params.populate;
   }
 
@@ -122,6 +125,7 @@ async function fetchFromStrapi(
   });
 
   const response = await fetch(url.href);
+
   if (!response.ok) throw new Error(`Failed to fetch: ${response.statusText}`);
   return response.json();
 }
