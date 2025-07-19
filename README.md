@@ -1,10 +1,9 @@
 # Cafecito
 
-React component library, in typescript. Augmenting other librariies.
+React component library, in typescript. Augmenting other libraries and frameworks
+to easily connect with Strapi backends.
 
-Easy to consume in astro & other applications.
-
-For the markkët content management system and compatible structures.
+Designed for astro & the markkët headless content management system.
 
 # Utilities
 
@@ -14,7 +13,7 @@ For the markkët content management system and compatible structures.
 
 ## Dependencies
 
-- Astro content
+
 
 # Install
 
